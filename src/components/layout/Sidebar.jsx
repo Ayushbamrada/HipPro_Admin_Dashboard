@@ -115,7 +115,7 @@ export default function Sidebar() {
       </h1>
 
       <nav className="flex flex-col gap-3">
-        <SidebarLink to="/dashboard" icon={<Home />} open={open} label="Dashboard" />
+        <SidebarLink to="/" icon={<Home />} open={open} label="Dashboard" />
         <SidebarLink to="/users" icon={<Users />} open={open} label="Users" />
         <SidebarLink to="/caregivers" icon={<HeartHandshake />} open={open} label="Caregivers" />
         <SidebarLink to="/sos" icon={<Bell />} open={open} label="SOS Logs" />

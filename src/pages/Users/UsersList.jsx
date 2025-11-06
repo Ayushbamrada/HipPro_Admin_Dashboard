@@ -68,6 +68,7 @@ import { Link, useLocation } from "react-router-dom";
 
 export default function UsersList() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);  // ✅ NEW
   const location = useLocation();
 
   useEffect(() => {
@@ -76,13 +77,25 @@ export default function UsersList() {
 
   const loadUsers = async () => {
     try {
+      setLoading(true);  // ✅ Start loading
       const list = await getAllUsers();
       setUsers(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error("Error fetching users:", err);
       setUsers([]);
+    } finally {
+      setLoading(false); // ✅ Stop loading
     }
   };
+
+  // ✅ Show spinner when loading
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div>

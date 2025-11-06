@@ -3,6 +3,7 @@ import { getAllSOSHistory } from "../../api/sosApi";
 
 export default function SOSLogs() {
   const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ NEW
 
   useEffect(() => {
     load();
@@ -10,13 +11,25 @@ export default function SOSLogs() {
 
   const load = async () => {
     try {
+      setLoading(true); // ✅ Show spinner
       const data = await getAllSOSHistory();
       console.log("SOS logs:", data);
       setLogs(data);
     } catch (err) {
       console.error("Error loading SOS logs:", err);
+    } finally {
+      setLoading(false); // ✅ Hide spinner
     }
   };
+
+  // ✅ Loading Spinner
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
