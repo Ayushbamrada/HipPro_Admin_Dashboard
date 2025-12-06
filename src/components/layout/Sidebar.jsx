@@ -1,94 +1,107 @@
+
 // import { useState } from "react";
 // import { NavLink } from "react-router-dom";
-// import {
-//   Menu,
-//   Home,
-//   Users,
-//   HeartHandshake,
-//   Bell,
-//   ClipboardList,
-//   Dumbbell,
-//   Settings,
-// } from "lucide-react";
+// import { AuthContext } from "../../context/AuthContext";  // 👈 import
+// import { Menu, Users, HeartHandshake, Bell, ListChecks, Dumbbell, Settings, Home } from "lucide-react";
 
 // export default function Sidebar() {
 //   const [open, setOpen] = useState(true);
+//   const { logout } = useContext(AuthContext);  // 👈 use logout
+//   const navigate = useNavigate();
 
-//   const menuItems = [
-//     { path: "/dashboard", label: "Dashboard", icon: <Home size={20} /> },
-//     { path: "/users", label: "Users", icon: <Users size={20} /> },
-//     { path: "/caregivers", label: "Caregivers", icon: <HeartHandshake size={20} /> },
-//     { path: "/sos", label: "SOS Logs", icon: <Bell size={20} /> },
-//     { path: "/tests", label: "Test History", icon: <ClipboardList size={20} /> },
-//     { path: "/exercises", label: "Exercises", icon: <Dumbbell size={20} /> },
-//     { path: "/settings", label: "Settings", icon: <Settings size={20} /> },
-//   ];
+//   const handleLogout = () => {
+//     logout(); // clears token
+//     navigate("/login", { replace: true }); // go to login page
+//   };
+
 
 //   return (
 //     <div
-//       className={`
-//         fixed left-0 top-0 h-screen
-//         ${open ? "w-64" : "w-20"}
-//         transition-all duration-300
-//         bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900
-//         text-white shadow-xl border-r border-gray-700
-//         overflow-hidden
-//       `}
+//       className={`${open ? "w-64" : "w-20"} 
+//       fixed left-0 top-0 h-screen 
+//       bg-gradient-to-b from-gray-900 to-gray-800 
+//       text-white flex flex-col 
+//       transition-all duration-300 shadow-xl z-50`}
 //     >
-//       {/* Toggle Button */}
-//       <div className="p-4">
-//         <button
-//           onClick={() => setOpen(!open)}
-//           className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
-//         >
-//           <Menu size={22} />
-//         </button>
-//       </div>
+//       {/* Toggle */}
+//       <button
+//         onClick={() => setOpen(!open)}
+//         className="p-3 hover:bg-gray-700 transition mb-4"
+//       >
+//         <Menu size={22} />
+//       </button>
 
-//       {/* Title */}
 //       <h1
-//         className={`text-2xl font-bold px-4 mb-4 transition-all duration-300 ${
+//         className={`text-2xl font-bold mb-6 transition-opacity duration-300 ${
 //           open ? "opacity-100" : "opacity-0"
 //         }`}
 //       >
 //         HIP PRO
 //       </h1>
 
-//       {/* Menu Items */}
-//       <nav className="flex flex-col gap-2 px-2 mt-3">
-//         {menuItems.map((item) => (
-//           <NavLink
-//             key={item.path}
-//             to={item.path}
-//             className={({ isActive }) =>
-//               `
-//               flex items-center gap-3 px-4 py-3 rounded-lg
-//               transition-all duration-200
-//               ${isActive ? "bg-white/20" : "hover:bg-white/10"}
-//               `
-//             }
-//           >
-//             {item.icon}
-
-//             <span
-//               className={`text-sm font-medium transition-opacity duration-300 ${
-//                 open ? "opacity-100" : "opacity-0"
-//               }`}
-//             >
-//               {item.label}
-//             </span>
-//           </NavLink>
-//         ))}
+//       <nav className="flex flex-col gap-3">
+//         <SidebarLink to="/" icon={<Home />} open={open} label="Dashboard" />
+//         <SidebarLink to="/users" icon={<Users />} open={open} label="Users" />
+//         <SidebarLink to="/caregivers" icon={<HeartHandshake />} open={open} label="Caregivers" />
+//         <SidebarLink to="/sos" icon={<Bell />} open={open} label="SOS Logs" />
+//         <SidebarLink to="/tests" icon={<ListChecks />} open={open} label="Test History" />
+//         <SidebarLink to="/exercises" icon={<Dumbbell />} open={open} label="Exercises" />
+//         <SidebarLink to="/settings" icon={<Settings />} open={open} label="Settings" />
 //       </nav>
+//        {/* 👇 Add logout at bottom */}
+//       <button
+//         onClick={handleLogout}
+//         className="absolute bottom-5 left-0 w-full text-center py-3 bg-red-600 hover:bg-red-700"
+//       >
+//         {open ? "Logout" : "⏻"}
+//       </button>
 //     </div>
 //   );
 // }
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { Menu, Users, HeartHandshake, Bell, ListChecks, Dumbbell, Settings, Home } from "lucide-react";
+
+// function SidebarLink({ to, icon, label, open }) {
+//   return (
+//     <NavLink
+//       to={to}
+//       className={({ isActive }) =>
+//         `flex items-center gap-4 px-4 py-3 rounded-md transition 
+//         ${isActive ? "bg-gray-700 text-white" : "hover:bg-gray-800"}`
+//       }
+//     >
+//       {icon}
+//       <span className={`${open ? "block" : "hidden"}`}>{label}</span>
+//     </NavLink>
+//   );
+// }
+
+
+
+
+// src/components/layout/Sidebar.jsx
+import { useState, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  Menu,
+  Users,
+  HeartHandshake,
+  Bell,
+  ListChecks,
+  Dumbbell,
+  Settings,
+  Home,
+  LogOut,
+} from "lucide-react";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); // clears token + localStorage
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div
@@ -114,15 +127,46 @@ export default function Sidebar() {
         HIP PRO
       </h1>
 
-      <nav className="flex flex-col gap-3">
+      {/* Navigation */}
+      <nav className="flex flex-col gap-3 flex-1">
         <SidebarLink to="/" icon={<Home />} open={open} label="Dashboard" />
         <SidebarLink to="/users" icon={<Users />} open={open} label="Users" />
-        <SidebarLink to="/caregivers" icon={<HeartHandshake />} open={open} label="Caregivers" />
+        <SidebarLink
+          to="/caregivers"
+          icon={<HeartHandshake />}
+          open={open}
+          label="Caregivers"
+        />
         <SidebarLink to="/sos" icon={<Bell />} open={open} label="SOS Logs" />
-        <SidebarLink to="/tests" icon={<ListChecks />} open={open} label="Test History" />
-        <SidebarLink to="/exercises" icon={<Dumbbell />} open={open} label="Exercises" />
-        <SidebarLink to="/settings" icon={<Settings />} open={open} label="Settings" />
+        <SidebarLink
+          to="/tests"
+          icon={<ListChecks />}
+          open={open}
+          label="Test History"
+        />
+        <SidebarLink
+          to="/exercises"
+          icon={<Dumbbell />}
+          open={open}
+          label="Exercises"
+        />
+        <SidebarLink
+          to="/settings"
+          icon={<Settings />}
+          open={open}
+          label="Settings"
+        />
       </nav>
+
+      {/* Logout button at bottom */}
+      <button
+        onClick={handleLogout}
+        className="m-3 mb-5 flex items-center justify-center gap-2 
+        bg-red-600 hover:bg-red-700 py-2 rounded-md text-sm font-medium"
+      >
+        <LogOut size={18} />
+        {open && <span>Logout</span>}
+      </button>
     </div>
   );
 }
@@ -133,7 +177,11 @@ function SidebarLink({ to, icon, label, open }) {
       to={to}
       className={({ isActive }) =>
         `flex items-center gap-4 px-4 py-3 rounded-md transition 
-        ${isActive ? "bg-gray-700 text-white" : "hover:bg-gray-800"}`
+        ${
+          isActive
+            ? "bg-gray-700 text-white"
+            : "hover:bg-gray-800 text-gray-200"
+        }`
       }
     >
       {icon}
